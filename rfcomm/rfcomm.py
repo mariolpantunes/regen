@@ -33,12 +33,14 @@ def main(args):
     signal.signal(signal.SIGINT, exit_gracefully)
     signal.signal(signal.SIGTERM, exit_gracefully)
 
-    global done = False
+    global done
+    done = False
 
     while not done:
         try:
             client = InfluxDBClient('localhost', 8086, '', '', 'regen')
             s = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
+            s.settimeout(5)
             s.connect((args.addr, 1))
 
             while not done:
