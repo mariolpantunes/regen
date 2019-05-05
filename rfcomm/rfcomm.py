@@ -25,7 +25,10 @@ handler = RotatingFileHandler('rfcomm.log', maxBytes=20, backupCount=2)
 logger.addHandler(handler)
 
 
-def exit_gracefully():
+done = False
+
+
+def exit_gracefully(signum, frame):
     global done
     done = True
     logger.info('Exit gracefully...')
@@ -36,7 +39,6 @@ def main(args):
     signal.signal(signal.SIGTERM, exit_gracefully)
 
     global done
-    done = False
 
     while not done:
         try:
