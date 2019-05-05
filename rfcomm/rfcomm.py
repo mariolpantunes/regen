@@ -18,8 +18,8 @@ import datetime
 from influxdb import InfluxDBClient
 
 
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s', datefmt='%m-%d %H:%M:%S')
 logger = logging.getLogger('RFComm')
-logger.basicConfig(level=logging.DEBUG, format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s', datefmt='%m-%d %H:%M:%S')
 handler = logging.RotatingFileHandler('rfcomm.log', maxBytes=20, backupCount=2)
 logger.addHandler(handler)
 
