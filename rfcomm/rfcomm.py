@@ -67,6 +67,7 @@ def main(args):
                     'time':datetime.datetime.now().isoformat(),
                     'fields':{'value': jdata['watt']}}]
                 logging.debug('JSON BODY %s', json_body)
+                client.write_points(json_body)
                 
         except Exception as e:
             logger.error('%s', e)
