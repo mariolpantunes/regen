@@ -24,24 +24,24 @@ handler = logging.RotatingFileHandler('rfcomm.log', maxBytes=20, backupCount=2)
 logger.addHandler(handler)
 
 
-done = False
-
-
 def exit_gracefully():
-    global done = True
+    global done
+    done = True
 
 
 def main(args):
     signal.signal(signal.SIGINT, exit_gracefully)
     signal.signal(signal.SIGTERM, exit_gracefully)
 
-    while global not done:
+    global done = False
+
+    while not done:
         try:
             client = InfluxDBClient('localhost', 8086, '', '', 'regen')
             s = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
             s.connect((args.addr, 1))
 
-            while global not done:
+            while not done:
                 packet = ''
                 while not packet or packet[-1] != '}': 
                     data = s.recv(256)
