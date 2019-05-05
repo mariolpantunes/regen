@@ -28,6 +28,7 @@ logger.addHandler(handler)
 def exit_gracefully():
     global done
     done = True
+    logger.info('Exit gracefully...')
 
 
 def main(args):
@@ -41,7 +42,7 @@ def main(args):
         try:
             client = InfluxDBClient('localhost', 8086, '', '', 'regen')
             s = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
-            s.settimeout(5)
+            s.settimeout(10)
             s.connect((args.addr, 1))
 
             while not done:
@@ -53,16 +54,18 @@ def main(args):
                 logging.debug('JSON %s', jdata)
                 json_body = [{'measurement':'voltage',
                     'tags':{'address':args.addr},
-                    'time':datetime.datetime.now().iso_format(),
+                    'time':datetime.datetime.now().isoformat(),
                     'fields':{'value': jdata['voltage']}},
                     {'measurement':'ampere',
                     'tags':{'address':args.addr},
-                    'time':datetime.datetime.now().iso_format(),
+                    'time':datetime.datetime.now().isoformat(),
                     'fields':{'value': jdata['ampere']}},
                     {'measurement':'watt',
                     'tags':{'address':args.addr},
-                    'time':datetime.datetime.now().iso_format(),
+                    'time':datetime.datetime.now().isoformat(),
                     'fields':{'value': jdata['watt']}}]
+                logging.debug('JSON BODY %s', json_body)
+                
         except Exception as e:
             logger.error('%s', e)
                 
