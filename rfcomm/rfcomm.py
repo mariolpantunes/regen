@@ -55,22 +55,21 @@ def main(args):
                 jdata = json.loads(packet)
                 logging.debug('JSON %s', jdata)
 
-                current_time = datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
+                current_time = datetime.datetime.utcnow().isoformat()
                 json_body = [{'measurement':'voltage',
                     'tags':{'address':args.addr},
                     'time':current_time,
-                    'fields':{'value': jdata['voltage']}},
+                    'fields':{'value': float(jdata['voltage'])}},
                     {'measurement':'ampere',
                     'tags':{'address':args.addr},
                     'time':current_time,
-                    'fields':{'value': jdata['ampere']}},
+                    'fields':{'value': float(jdata['ampere'])}},
                     {'measurement':'watt',
                     'tags':{'address':args.addr},
                     'time':current_time,
-                    'fields':{'value': jdata['watt']}}]
+                    'fields':{'value': float(jdata['watt'])}}]
                 logging.debug('JSON BODY %s', json_body)
-                #client.write_points(json_body, time_precision='ms')
-                client.write_points(json_body)
+                client.write_points(json_body, time_precision='ms')
 
         except Exception as e:
             logger.error('%s', e)
