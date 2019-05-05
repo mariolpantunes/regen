@@ -24,7 +24,7 @@ handler = logging.RotatingFileHandler('rfcomm.log', maxBytes=20, backupCount=2)
 logger.addHandler(handler)
 
 
-global done = False
+done = False
 
 
 def exit_gracefully():
