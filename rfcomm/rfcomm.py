@@ -69,8 +69,9 @@ def main(args):
                     'time':current_time,
                     'fields':{'value': jdata['watt']}}]
                 logging.debug('JSON BODY %s', json_body)
-                client.write_points(json_body, time_precision='ms')
-                
+                #client.write_points(json_body, time_precision='ms')
+                client.write_points(json_body)
+
         except Exception as e:
             logger.error('%s', e)
                 
