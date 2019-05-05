@@ -21,7 +21,8 @@ from logging.handlers import RotatingFileHandler
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s', datefmt='%m-%d %H:%M:%S')
 logger = logging.getLogger('RFComm')
-handler = RotatingFileHandler('rfcomm.log', maxBytes=20, backupCount=2)
+#handler = RotatingFileHandler('rfcomm.log', maxBytes=20, backupCount=2)
+handler = logging.handlers.SysLogHandler(address = '/dev/log')
 logger.addHandler(handler)
 
 
@@ -53,7 +54,7 @@ def main(args):
                     data = s.recv(256)
                     packet += data.decode('utf-8')
                 jdata = json.loads(packet)
-                logging.debug('JSON %s', jdata)
+                logger.debug('JSON %s', jdata)
 
                 current_time = datetime.datetime.utcnow().isoformat()
                 json_body = [{'measurement':'voltage',
@@ -68,7 +69,7 @@ def main(args):
                     'tags':{'address':args.addr},
                     'time':current_time,
                     'fields':{'value': float(jdata['watt'])}}]
-                logging.debug('JSON BODY %s', json_body)
+                logger.debug('JSON BODY %s', json_body)
                 client.write_points(json_body, time_precision='ms')
 
         except Exception as e:
