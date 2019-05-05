@@ -16,11 +16,12 @@ import logging
 import argparse
 import datetime
 from influxdb import InfluxDBClient
+from logging.handlers import RotatingFileHandler
 
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s', datefmt='%m-%d %H:%M:%S')
 logger = logging.getLogger('RFComm')
-handler = logging.RotatingFileHandler('rfcomm.log', maxBytes=20, backupCount=2)
+handler = RotatingFileHandler('rfcomm.log', maxBytes=20, backupCount=2)
 logger.addHandler(handler)
 
 
