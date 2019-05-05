@@ -54,17 +54,19 @@ def main(args):
                     packet += data.decode('utf-8')
                 jdata = json.loads(packet)
                 logging.debug('JSON %s', jdata)
+
+                current_time = datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
                 json_body = [{'measurement':'voltage',
                     'tags':{'address':args.addr},
-                    'time':datetime.datetime.now().isoformat(),
+                    'time':current_time,
                     'fields':{'value': jdata['voltage']}},
                     {'measurement':'ampere',
                     'tags':{'address':args.addr},
-                    'time':datetime.datetime.now().isoformat(),
+                    'time':current_time,
                     'fields':{'value': jdata['ampere']}},
                     {'measurement':'watt',
                     'tags':{'address':args.addr},
-                    'time':datetime.datetime.now().isoformat(),
+                    'time':current_time,
                     'fields':{'value': jdata['watt']}}]
                 logging.debug('JSON BODY %s', json_body)
                 client.write_points(json_body, time_precision='ms')
