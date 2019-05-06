@@ -10,6 +10,7 @@ __status__ = "Development"
 
 
 import json
+import time
 import socket
 import signal
 import logging
@@ -71,9 +72,11 @@ def main(args):
                     'fields':{'value': float(jdata['watt'])}}]
                 logger.debug('JSON BODY %s', json_body)
                 client.write_points(json_body, time_precision='ms')
+                time.sleep(2.5)
 
         except Exception as e:
             logger.error('%s', e)
+            time.sleep(5)
                 
     s.close()
     client.close()
