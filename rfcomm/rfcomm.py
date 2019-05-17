@@ -45,7 +45,7 @@ def main(args):
         try:
             client = InfluxDBClient('localhost', 8086, '', '', 'regen')
             s = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
-            s.settimeout(5)
+            s.settimeout(1)
             s.connect((args.addr, 1))
 
             while not done:
@@ -71,7 +71,7 @@ def main(args):
                     'fields':{'value': float(jdata['watt'])}}]
                 logger.debug('JSON BODY %s', json_body)
                 client.write_points(json_body, time_precision='ms')
-                time.sleep(5)
+                time.sleep(2)
 
         except Exception as e:
             logger.error('%s', e)
