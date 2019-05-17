@@ -1,12 +1,12 @@
 # coding: utf-8
 
 
-__author__ = "Mário Antunes"
-__license__ = "MIT"
-__version__ = "0.1"
-__maintainer__ = "Mário Antunes"
-__email__ = "mariolpantunes@gmail.com"
-__status__ = "Development"
+__author__ = 'Mário Antunes'
+__license__ = 'MIT'
+__version__ = '0.1'
+__maintainer__ = 'Mário Antunes'
+__email__ = 'mariolpantunes@gmail.com'
+__status__ = 'Development'
 
 
 import json
@@ -45,7 +45,7 @@ def main(args):
         try:
             client = InfluxDBClient('localhost', 8086, '', '', 'regen')
             s = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
-            s.settimeout(1)
+            s.settimeout(args.timeout)
             s.connect((args.addr, 1))
 
             while not done:
@@ -71,12 +71,15 @@ def main(args):
                     'fields':{'value': float(jdata['watt'])}}]
                 logger.debug('JSON BODY %s', json_body)
                 client.write_points(json_body, time_precision='ms')
-                time.sleep(2)
-
+                time.sleep(5)
         except Exception as e:
             logger.error('%s', e)
-            time.sleep(10)
+            time.sleep(args.sleep)
+        finally:
+            s.close()
+            client.close()
                 
+    
     s.close()
     client.close()
 
@@ -84,6 +87,8 @@ def main(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='RFComm - Reads data from the bt')
     parser.add_argument('--addr', type=str, help='target address', default='FC:A8:9A:00:52:7E')
+    parser.add_argument('--sleep', type=int, help='sleep when device is not transmitting', default=10)
+    parser.add_argument('--timeout', type=int, help='timeout for the BT socket', default=1)
     args = parser.parse_args()
     main(args)
 
