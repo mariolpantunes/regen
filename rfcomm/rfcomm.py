@@ -22,7 +22,6 @@ from logging.handlers import RotatingFileHandler
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s', datefmt='%m-%d %H:%M:%S')
 logger = logging.getLogger('RFComm')
-#handler = RotatingFileHandler('rfcomm.log', maxBytes=20, backupCount=2)
 handler = logging.handlers.SysLogHandler(address = '/dev/log')
 logger.addHandler(handler)
 
@@ -46,7 +45,7 @@ def main(args):
         try:
             client = InfluxDBClient('localhost', 8086, '', '', 'regen')
             s = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
-            s.settimeout(10)
+            s.settimeout(5)
             s.connect((args.addr, 1))
 
             while not done:
@@ -72,11 +71,11 @@ def main(args):
                     'fields':{'value': float(jdata['watt'])}}]
                 logger.debug('JSON BODY %s', json_body)
                 client.write_points(json_body, time_precision='ms')
-                time.sleep(2.5)
+                time.sleep(5)
 
         except Exception as e:
             logger.error('%s', e)
-            time.sleep(5)
+            time.sleep(10)
                 
     s.close()
     client.close()
