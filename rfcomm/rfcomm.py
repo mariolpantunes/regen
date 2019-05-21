@@ -36,6 +36,14 @@ def exit_gracefully(signum, frame):
         logger.info('Exit gracefully...')
 
 
+def is_json(txt):
+    try:
+        json_object = json.loads(txt)
+    except ValueError as e:
+        return False
+    return True
+
+
 def main(args):
     signal.signal(signal.SIGINT, exit_gracefully)
     signal.signal(signal.SIGTERM, exit_gracefully)
@@ -44,20 +52,26 @@ def main(args):
 
     while not done:
         try:
-            client = InfluxDBClient('localhost', 8086, '', '', 'regen')
-            s = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)  
+            #client = InfluxDBClient('localhost', 8086, '', '', 'regen')
+            s = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
+            logger.info('INSIDE -2')
             s.connect((args.addr, args.port))
             s.settimeout(args.timeout)
+            logger.info('INSIDE -1')
             
             while not done:
-                packet = ''
-                while not packet or packet[-1] != '}': 
+                logger.info('INSIDE 0')
+                data = s.recv(128)
+                packet = data.decode('utf-8')
+                current_time = datetime.datetime.utcnow().isoformat()
+                
+                while not is_json(packet):
+                    logger.info('INSIDE 1')
                     data = s.recv(128)
                     packet += data.decode('utf-8')
+                    logger.info('PACKET: %s', packet)
                 jdata = json.loads(packet)
                 logger.debug('JSON %s', jdata)
-
-                current_time = datetime.datetime.utcnow().isoformat()
 
                 a0 = jdata['a0']
                 a1 = jdata['a1']
@@ -102,14 +116,14 @@ def main(args):
                     'time':current_time,
                     'fields':{'value': float(a2['watt'])}}]
                 logger.debug('JSON BODY %s', json_body)
-                client.write_points(json_body, time_precision='ms')
+                #client.write_points(json_body, time_precision='ms')
         except Exception as e:
             logger.error('%s', e)
             if not done:
                 time.sleep(args.sleep)
         finally:
             s.close()
-            client.close()
+            #client.close()
 
 
 if __name__ == '__main__':
