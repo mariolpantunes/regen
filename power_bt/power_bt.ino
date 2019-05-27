@@ -2,30 +2,30 @@
 #include <ArduinoJson.h>
 
 const float VCC   = 5.0;// supply voltage 5V or 3.3V. If using PCB, set to 5V only.
-const int model = 2;   // enter the model (see below)
-float cutOffLimit = 2.00;// reading cutt off current. 1.00 is 1 Amper
+const int model = 2;    // enter the model (see below)
+float cutOffLimit = 1.0;// reading cutt off current. 1.00 is 1 Amper
 
 /*
-   "ACS758LCB-050B",// for model use 0
-   "ACS758LCB-050U",// for model use 1
-   "ACS758LCB-100B",// for model use 2
-   "ACS758LCB-100U",// for model use 3
-   "ACS758KCB-150B",// for model use 4
-   "ACS758KCB-150U",// for model use 5
-   "ACS758ECB-200B",// for model use 6
-   "ACS758ECB-200U"// for model use  7
+   "ACS758LCB-050B", // for model use 0
+   "ACS758LCB-050U", // for model use 1
+   "ACS758LCB-100B", // for model use 2
+   "ACS758LCB-100U", // for model use 3
+   "ACS758KCB-150B", // for model use 4
+   "ACS758KCB-150U", // for model use 5
+   "ACS758ECB-200B", // for model use 6
+   "ACS758ECB-200U"  // for model use  7
    sensitivity array is holding the sensitivy of the  ACS758
    current sensors. Do not change.
 */
 float sensitivity[] = {
-  40.0,// for ACS758LCB-050B
-  60.0,// for ACS758LCB-050U
-  20.0,// for ACS758LCB-100B
-  40.0,// for ACS758LCB-100U
-  13.3,// for ACS758KCB-150B
-  16.7,// for ACS758KCB-150U
-  10.0,// for ACS758ECB-200B
-  20.0,// for ACS758ECB-200U
+  40.0, // for ACS758LCB-050B
+  60.0, // for ACS758LCB-050U
+  20.0, // for ACS758LCB-100B
+  40.0, // for ACS758LCB-100U
+  13.3, // for ACS758KCB-150B
+  16.7, // for ACS758KCB-150U
+  10.0, // for ACS758ECB-200B
+  20.0, // for ACS758ECB-200U
 };
 
 /*
@@ -38,13 +38,13 @@ float sensitivity[] = {
    Do not change.
 */
 float quiescent_Output_voltage [] = {
-  0.5,// for ACS758LCB-050B
+  0.5, // for ACS758LCB-050B
   0.12,// for ACS758LCB-050U
-  0.5,// for ACS758LCB-100B
+  0.5, // for ACS758LCB-100B
   0.12,// for ACS758LCB-100U
-  0.5,// for ACS758KCB-150B
+  0.5, // for ACS758KCB-150B
   0.12,// for ACS758KCB-150U
-  0.5,// for ACS758ECB-200B
+  0.5, // for ACS758ECB-200B
   0.12,// for ACS758ECB-200U
 };
 const float FACTOR = sensitivity[model] / 1000; // set sensitivity for selected model

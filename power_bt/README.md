@@ -14,7 +14,16 @@ Assemble the circuit following the diagram layout.png attached to the sketch.
 
 ## Load the code
 
+The code only imports two libraries: Wire and ArduinoJson.
+Both of them can be found in the library manager of Arduino IDE.
+After importing the libraries, simply compute and upload the code.
+
 ## BOM
+
+| ID |    Part Name   | Part Number | Quantity |
+|----|----------------|-------------|----------|
+| BT | BT module      |    HC-05    |     1    |
+| CS | Current Sensor | ACS758 100B |     3    |
 
 ## Authors
 
