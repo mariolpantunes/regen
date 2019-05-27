@@ -3,7 +3,7 @@
 
 const float VCC   = 5.0;// supply voltage 5V or 3.3V. If using PCB, set to 5V only.
 const int model = 2;   // enter the model (see below)
-float cutOffLimit = 1.0;// reading cutt off current. 1.00 is 1 Amper
+float cutOffLimit = 2.00;// reading cutt off current. 1.00 is 1 Amper
 
 /*
    "ACS758LCB-050B",// for model use 0
@@ -71,16 +71,9 @@ void loop()
   float current = voltage / FACTOR;
 
   JsonObject a0 = doc.createNestedObject("a0");
-
-  if (abs(voltage) > cutOff ) {
-    a0["voltage"] = voltage;
-    a0["ampere"] = current;
-    a0["watt"] = voltage * current;
-  } else {
-    a0["voltage"] = NULL;
-    a0["ampere"] = NULL;
-    a0["watt"] = NULL;
-  }
+  a0["voltage"] = voltage;
+  a0["ampere"] = current;
+  a0["watt"] = voltage * current;
 
   // READ data from A1
   voltage_raw =   (5.0 / 1023.0) * ai1; // Read the voltage from sensor
@@ -88,33 +81,19 @@ void loop()
   current = voltage / FACTOR;
 
   JsonObject a1 = doc.createNestedObject("a1");
-
-  if (abs(voltage) > cutOff ) {
-    a1["voltage"] = voltage;
-    a1["ampere"] = current;
-    a1["watt"] = voltage * current;
-  } else {
-    a1["voltage"] = NULL;
-    a1["ampere"] = NULL;
-    a1["watt"] = NULL;
-  }
-
+  a1["voltage"] = voltage;
+  a1["ampere"] = current;
+  a1["watt"] = voltage * current;
+  
   // READ data from A2
   voltage_raw =   (5.0 / 1023.0) * ai2; // Read the voltage from sensor
   voltage =  voltage_raw - QOV + 0.007 ;// 0.007 is a value to make voltage zero when there is no current
   current = voltage / FACTOR;
 
   JsonObject a2 = doc.createNestedObject("a2");
-
-  if (abs(voltage) > cutOff ) {
-    a2["voltage"] = voltage;
-    a2["ampere"] = current;
-    a2["watt"] = voltage * current;
-  } else {
-    a2["voltage"] = NULL;
-    a2["ampere"] = NULL;
-    a2["watt"] = NULL;
-  }
+  a2["voltage"] = voltage;
+  a2["ampere"] = current;
+  a2["watt"] = voltage * current;
 
   //serializeJson(doc, BTSerial);
   serializeJson(doc, Serial);
