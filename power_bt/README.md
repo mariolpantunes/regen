@@ -22,7 +22,8 @@ After importing the libraries, simply compute and upload the code.
 
 | ID |    Part Name   | Part Number | Quantity |
 |----|----------------|-------------|----------|
-| BT | BT module      |    HC-05    |     1    |
+| AU | Arduino Uno    | Arduino Uno |     1    |
+| BT | BT module      | HC-05       |     1    |
 | CS | Current Sensor | ACS758 100B |     3    |
 
 ## Authors
